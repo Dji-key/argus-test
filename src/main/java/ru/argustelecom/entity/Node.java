@@ -1,16 +1,28 @@
-package ru.argustelecom.model;
+package ru.argustelecom.entity;
 
-import ru.argustelecom.model.absracts.NamedEntityObject;
-
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.util.Objects;
+import java.util.HashSet;
 import java.util.Set;
 
+@Entity
 @Table(name = "node")
-public class Node extends NamedEntityObject {
+public class Node {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "title")
+    private String title;
 
     @Column(name = "region")
     private String region;
@@ -21,8 +33,26 @@ public class Node extends NamedEntityObject {
     @Column(name = "building")
     private String building;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "node")
-    private Set<ConnectionUnit> connectionUnits;
+    @OneToMany(fetch = FetchType.EAGER, orphanRemoval = true, mappedBy = "node", cascade = CascadeType.ALL)
+    private Set<ConnectionUnit> connectionUnits = new HashSet<>();
+
+    public Long getId() {
+        return id;
+    }
+
+    public Node setId(Long id) {
+        this.id = id;
+        return this;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public Node setTitle(String title) {
+        this.title = title;
+        return this;
+    }
 
     public String getRegion() {
         return region;
