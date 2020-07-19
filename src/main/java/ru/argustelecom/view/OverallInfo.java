@@ -77,6 +77,7 @@ public class OverallInfo implements Serializable {
     public void addFakeData() {
         if (emptyData) {
             dataMiner.bringItOn();
+            init();
         }
     }
 }

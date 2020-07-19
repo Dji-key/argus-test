@@ -7,13 +7,11 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 <f:view>
-    <h:head>
-
-    </h:head>
+    <h:head/>
     <h:body>
         <p:outputLabel value="Информация по всем узлам:"/>
-        <h:form>
-            <p:dataTable value="#{overallInfo.nodes}" var="node" id="info-table">
+        <h:form id="info-table">
+            <p:dataTable value="#{overallInfo.nodes}" var="node">
                 <p:columnGroup type="header">
                     <p:row>
                         <p:column rowspan="2" headerText="Имя"/>
@@ -28,12 +26,10 @@
                     </p:row>
                 </p:columnGroup>
                 <p:column>
-<!--                    <h:outputLink value="node-info.xhtml">#{node.title}</h:outputLink>-->
                     <h:link value="#{node.title}" outcome="node-info">
                         <f:param name="nodeId" value="#{node.id}"/>
                     </h:link>
                 </p:column>
-<!--                <p:column><h:outputText value="#{node.title}"/></p:column>-->
                 <p:column><h:outputText value="#{node.street}"/></p:column>
                 <p:column><h:outputText value="#{node.building}"/></p:column>
                 <p:column><h:outputText value="#{overallInfo.getPointsQty(node)}"/></p:column>
