@@ -8,8 +8,11 @@
       xmlns:p="http://primefaces.org/ui">
 <f:view>
     <h:head/>
+<!--    Здесь должна была находиться красивая диаграмма узлов, нарисованная средствами primefaces, -->
+<!--    но как я ни старался её прикрутить, она не работала, поэтому вот так.-->
+<!--    Есть список узлов, в которых зафетчены дочерние элементы, остальное дело техники и времени, которого у меня не осталось =(-->
     <h:body>
-        <p:outputLabel value="Узел #{nodeInfo.node.title} связан со следующими узлами:"/>
+        <p:outputLabel value="#{nodeInfo.node.title} связан со следующими узлами:"/>
         <h:form>
             <p:dataTable value="#{nodeInfo.connectedNodes}" var="node" id="info-table">
                 <p:columnGroup type="header">

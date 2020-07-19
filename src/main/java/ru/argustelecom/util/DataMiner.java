@@ -22,13 +22,13 @@ public class DataMiner {
         List<Point> points = new ArrayList<>();
 
         for (int i = 0; i < 10 * StrictMath.random() + 3; i++) {
-            Node node = new Node().setTitle("Узел №" + i)
-                    .setRegion("Регион узла №" + i)
-                    .setStreet("Улица узла №" + i)
+            Node node = new Node().setTitle("Node №" + i)
+                    .setRegion("Region of node №" + i)
+                    .setStreet("Street of node №" + i)
                     .setBuilding("№" + i);
             nodes.add(node);
             for (int j = 0; j < 10 * StrictMath.random(); j++) {
-                ConnectionUnit connectionUnit = new ConnectionUnit().setTitle("Коннектор №" + j + " узла №" + i).setNode(node);
+                ConnectionUnit connectionUnit = new ConnectionUnit().setTitle("Connection unit №" + j + " of node №" + i).setNode(node);
                 node.getConnectionUnits().add(connectionUnit);
                 for (int k = 0; k < 10 * StrictMath.random(); k++) {
                     Point point = new Point().setConnectionUnit(connectionUnit);

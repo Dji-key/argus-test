@@ -21,17 +21,6 @@
             <artifactId>javaee-api</artifactId>
             <version>8.0.1</version>
         </dependency>
-        <!--        <dependency>-->
-<!--            <groupId>javax.faces</groupId>-->
-<!--            <artifactId>javax.faces-api</artifactId>-->
-<!--            <version>2.3</version>-->
-<!--            <scope>provided</scope>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.glassfish</groupId>-->
-<!--            <artifactId>javax.faces</artifactId>-->
-<!--            <version>2.2.0</version>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>org.primefaces</groupId>
             <artifactId>primefaces</artifactId>
@@ -50,6 +39,101 @@
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
+    <profiles>
+        <profile>
+            <id>add-datasource</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.wildfly.plugins</groupId>
+                        <artifactId>wildfly-maven-plugin</artifactId>
+                        <version>2.0.1.Final</version>
+                        <executions>
+                            <execution>
+                                <id>start-server</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>start</goal>
+                                </goals>
+                                <configuration>
+                                    <jboss-home>${env.WILDFLY_SERVER}</jboss-home>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>add-datasource</id>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>add-resource</goal>
+                                </goals>
+                                <configuration>
+                                    <address>subsystem=datasources,data-source=java:jboss/datasources/argusStore</address>
+                                    <resources>
+                                        <resource>
+                                            <properties>
+                                                <jndi-name>java:/argusStore</jndi-name>
+                                                <enabled>true</enabled>
+                                                <connection-url>jdbc:h2:mem:argusstore;DB_CLOSE_DELAY=-1</connection-url>
+                                                <driver-class>org.h2.Driver</driver-class>
+                                                <driver-name>h2</driver-name>
+                                                <user-name>sa</user-name>
+                                                <password>sa</password>
+                                            </properties>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>stop-server</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>shutdown</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>add-datasource-running</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.wildfly.plugins</groupId>
+                        <artifactId>wildfly-maven-plugin</artifactId>
+                        <version>2.0.1.Final</version>
+                        <executions>
+                            <execution>
+                                <id>add-datasource</id>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>add-resource</goal>
+                                </goals>
+                                <configuration>
+                                    <address>subsystem=datasources,data-source=java:jboss/datasources/argusStore</address>
+                                    <resources>
+                                        <resource>
+                                            <properties>
+                                                <jndi-name>java:/argusStore</jndi-name>
+                                                <enabled>true</enabled>
+                                                <connection-url>jdbc:h2:mem:argusstore;DB_CLOSE_DELAY=-1</connection-url>
+                                                <driver-class>org.h2.Driver</driver-class>
+                                                <driver-name>h2</driver-name>
+                                                <user-name>sa</user-name>
+                                                <password>sa</password>
+                                            </properties>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     <build>
         <finalName>argus_test</finalName>
         <plugins>
@@ -61,46 +145,6 @@
                     <warSourceDirectory>web</warSourceDirectory>
                 </configuration>
             </plugin>
-<!--            <plugin>-->
-<!--                <groupId>org.wildfly.plugins</groupId>-->
-<!--                <artifactId>wildfly-maven-plugin</artifactId>-->
-<!--                <version>2.0.1.Final</version>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>start-server</id>-->
-<!--                        <phase>compile</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>start</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            <jboss-home>${env.WILDFLY_SERVER}</jboss-home>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
-<!--                    <execution>-->
-<!--                        <id>add-datasource</id>-->
-<!--                        <phase>package</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>add-resource</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            <address>subsystem=datasources,data-source=java:jboss/datasources/argusStore</address>-->
-<!--                            <resources>-->
-<!--                                <resource>-->
-<!--                                    <properties>-->
-<!--                                        <jndi-name>java:/argusStore</jndi-name>-->
-<!--                                        <enabled>true</enabled>-->
-<!--                                        <connection-url>jdbc:h2:mem:argusstore;DB_CLOSE_DELAY=-1</connection-url>-->
-<!--                                        <driver-class>org.h2.Driver</driver-class>-->
-<!--                                        <driver-name>h2</driver-name>-->
-<!--                                        <user-name>sa</user-name>-->
-<!--                                        <password>sa</password>-->
-<!--                                    </properties>-->
-<!--                                </resource>-->
-<!--                            </resources>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
         </plugins>
     </build>
 
