@@ -3,63 +3,80 @@ package ru.argustelecom.view;
 import ru.argustelecom.dao.interfaces.NodeDao;
 import ru.argustelecom.entity.ConnectionUnit;
 import ru.argustelecom.entity.Node;
-import ru.argustelecom.entity.Point;
+import ru.argustelecom.util.DataMiner;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.enterprise.context.SessionScoped;
+import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
+/**
+ * Bean для отображения информации по всем узлам
+ */
 @Named
-@SessionScoped
+@ViewScoped
 public class OverallInfo implements Serializable {
 
     @EJB
     private NodeDao nodeDao;
+    @EJB
+    private DataMiner dataMiner;
 
     private List<Node> nodes;
+
+    //Флаг для отображения кнопки
+    private boolean emptyData = true;
 
     @PostConstruct
     private void init() {
         nodes = nodeDao.findAll();
-        System.out.println("hello");
-    }
-
-    public NodeDao getNodeDao() {
-        return nodeDao;
-    }
-
-    public OverallInfo setNodeDao(NodeDao nodeDao) {
-        this.nodeDao = nodeDao;
-        return this;
+        if (!nodes.isEmpty()) {
+            emptyData = false;
+        }
     }
 
     public List<Node> getNodes() {
         return nodes;
     }
 
-    public OverallInfo setNodes(List<Node> nodes) {
-        this.nodes = nodes;
-        return this;
+    public boolean isEmptyData() {
+        return emptyData;
     }
 
-    public void addNode() {
-        Point point = new Point();
-        ConnectionUnit connectionUnit = new ConnectionUnit();
-        connectionUnit.setTitle("Unit");
-        connectionUnit.getPoints().add(point);
-        point.setConnectionUnit(connectionUnit);
-        Node node = new Node();
-        node.setTitle("Node").setStreet("Street").setBuilding("Building").setRegion("Region");
-        node.getConnectionUnits().add(connectionUnit);
-        connectionUnit.setNode(node);
-        nodes.add(nodeDao.save(node));
-        System.out.println("Hello");
+    /**
+     * Подсчёт суммарного количества точек в узле
+     * @param node данный узел {@link Node}
+     * @return Суммарное количество точек
+     */
+    public int getPointsQty(Node node) {
+        return node.getConnectionUnits().stream()
+                .map(ConnectionUnit::getPoints)
+                .mapToInt(Set::size)
+                .sum();
     }
 
-    public void deleteNode() {
+    /**
+     * Подсчёт суммарного количества свободных точек в узле
+     * @param node данный узел {@link Node}
+     * @return Суммарное количество свободных точек
+     */
+    public long getSparePointsQty(Node node) {
+        return node.getConnectionUnits().stream()
+                .map(ConnectionUnit::getPoints)
+                .mapToLong(points -> points.stream()
+                        .filter(point -> point.getConnected() == null).count())
+                .sum();
+    }
 
+    /**
+     * Заполняет базу фейковыми данными
+     */
+    public void addFakeData() {
+        if (emptyData) {
+            dataMiner.bringItOn();
+        }
     }
 }

@@ -21,12 +21,6 @@
             <artifactId>javaee-api</artifactId>
             <version>8.0.1</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.omnifaces</groupId>-->
-<!--            <artifactId>omnifaces</artifactId>-->
-<!--            <version>3.6</version>-->
-<!--        </dependency>-->
-
         <!--        <dependency>-->
 <!--            <groupId>javax.faces</groupId>-->
 <!--            <artifactId>javax.faces-api</artifactId>-->

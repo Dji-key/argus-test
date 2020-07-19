@@ -7,8 +7,11 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 <f:view>
-    <h:head>Общая информация</h:head>
+    <h:head>
+
+    </h:head>
     <h:body>
+        <p:outputLabel value="Информация по всем узлам:"/>
         <h:form>
             <p:dataTable value="#{overallInfo.nodes}" var="node" id="info-table">
                 <p:columnGroup type="header">
@@ -33,10 +36,10 @@
 <!--                <p:column><h:outputText value="#{node.title}"/></p:column>-->
                 <p:column><h:outputText value="#{node.street}"/></p:column>
                 <p:column><h:outputText value="#{node.building}"/></p:column>
-                <p:column><h:outputText value="#{overallInfo.nodes.size()}"/></p:column>
-                <p:column><h:outputText value="#{node.connectionUnits.size()}"/></p:column>
+                <p:column><h:outputText value="#{overallInfo.getPointsQty(node)}"/></p:column>
+                <p:column><h:outputText value="#{overallInfo.getSparePointsQty(node)}"/></p:column>
             </p:dataTable>
-            <p:commandButton value="Накинуть сущность" action="#{overallInfo.addNode}" update="info-table"/>
+            <p:commandButton value="Заполнить фейковыми данными" action="#{overallInfo.addFakeData}" update="info-table" rendered="#{overallInfo.emptyData}"/>
         </h:form>
     </h:body>
 </f:view>

@@ -7,15 +7,38 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 <f:view>
-    <h:head>Связи узла</h:head>
+    <h:head>
+
+    </h:head>
     <h:body>
+        <p:outputLabel value="Узел #{nodeInfo.node.title} связан со следующими узлами:"/>
         <h:form>
-            <h:panelGrid>
-                <h:outputText value="#{nodeInfo.node.id}"/>
-                <h:outputText value="#{nodeInfo.node.title}"/>
-                <h:outputText value="#{nodeInfo.node.building}"/>
-            </h:panelGrid>
+            <p:dataTable value="#{nodeInfo.connectedNodes}" var="node" id="info-table">
+                <p:columnGroup type="header">
+                    <p:row>
+                        <p:column rowspan="2" headerText="Имя"/>
+                        <p:column colspan="2" headerText="Расположение"/>
+                        <p:column colspan="2" headerText="Точки"/>
+                    </p:row>
+                    <p:row>
+                        <p:column headerText="Улица"/>
+                        <p:column headerText="Дом"/>
+                        <p:column headerText="Всего"/>
+                        <p:column headerText="Свободно"/>
+                    </p:row>
+                </p:columnGroup>
+                <p:column>
+                    <h:link value="#{node.title}" outcome="node-info">
+                        <f:param name="nodeId" value="#{node.id}"/>
+                    </h:link>
+                </p:column>
+                <p:column><h:outputText value="#{node.street}"/></p:column>
+                <p:column><h:outputText value="#{node.building}"/></p:column>
+                <p:column><h:outputText value="#{overallInfo.getPointsQty(node)}"/></p:column>
+                <p:column><h:outputText value="#{overallInfo.getSparePointsQty(node)}"/></p:column>
+            </p:dataTable>
         </h:form>
+        <p:commandButton value="Все узлы" action="overall-info" style="float: right"/>
     </h:body>
 </f:view>
 </html>
