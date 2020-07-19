@@ -16,14 +16,14 @@
 
 1. Если переменная WILDFLY_SERVER установлена:
 
-*остановить сервер, если запущен*
-*mvn clean package -P add-datasource*
+*остановить сервер, если запущен*\
+*mvn clean package -P add-datasource*\
 Это запустит сервер, добавит datasource и остановит его
 
 2. Если переменная WILDFLY_SERVER не установлена:
 
-*запустить сервер*
-*mvn clean package -P add-datasource-running*
+*запустить сервер*\
+*mvn clean package -P add-datasource-running*\
 Это добавит datasource в запущенный сервер
 
 3. Можно добавить datasource в wildfly руками (не рекомендую), база данных H2, логин и пароль - sa, JNDI - java:/argusStore. После чего:
